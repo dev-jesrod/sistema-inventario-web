@@ -2,23 +2,39 @@
 
 try {
 
+    // 1. Obtener la conexión con MySQL
     $conexion = require __DIR__ . '/../app/config/database.php';
 
+    // 2. Cargar el modelo
     require_once __DIR__ . '/../app/models/Categoria.php';
 
-    $categoria = new Categoria($conexion);
+    // 3. Cargar el controlador
+    require_once __DIR__ . '/../app/controllers/CategoriaController.php';
 
-    $categorias = $categoria->obtenerTodas();
+    // 4. Crear los objetos
+    $modeloCategoria = new Categoria($conexion);
 
+    $controladorCategoria = new CategoriaController( $modeloCategoria);
+
+    // 5. Solicitar las categorías al controlador
+    $categorias = $controladorCategoria->listar();
+
+    // 6. Mostrar los resultados
     echo "<h2>Categorías registradas</h2>";
 
-    foreach ($categorias as $item) {
-        echo $item['id_categoria'] . " - ";
-        echo $item['nombre'] . "<br>";
+    foreach ($categorias as $categoria) {
+
+        echo htmlspecialchars(
+            $categoria['nombre'],
+            ENT_QUOTES,
+            'UTF-8'
+        );
+
+        echo "<br>";
     }
 
-} catch (PDOException $e) {
+} catch (Throwable $e) {
 
-    echo "Error: " . $e->getMessage();
+    echo "Ocurrió un error: " . $e->getMessage();
 
 }
