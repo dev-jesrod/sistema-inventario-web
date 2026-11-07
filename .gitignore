@@ -12,3 +12,6 @@ Thumbs.db
 
 # Configuración personal de VS Code
 .vscode/
+
+#Configuracion local de base de datos
+/app/config/database.local.php
